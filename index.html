@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wetin Dey Sup</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d35400">
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <h2>Wetin Dey Sup</h2>
+  <button id="themeToggleBtn">Switch to Light Mode</button>
+</div>
+
+<!-- Hamburger icon (move this below the sidebar) -->
+<div id="hamburger" style="position: fixed; top: 20px; left: 20px; cursor: pointer; z-index: 2100;">
+  <div style="width: 30px; height: 4px; background: orange; margin: 6px 0; border-radius: 2px;"></div>
+  <div style="width: 30px; height: 4px; background: orange; margin: 6px 0; border-radius: 2px;"></div>
+  <div style="width: 30px; height: 4px; background: orange; margin: 6px 0; border-radius: 2px;"></div>
+</div>
+
+<div class="app">
+
+  <h1>🧠 Wetin Dey Sup</h1>
+
+  <div id="setPasscodeScreen" style="display: none;">
+    <h2>🔐 Set a Passcode for your journal</h2>
+    <input type="password" id="newPasscode" placeholder="Enter new passcode" />
+    <input type="password" id="confirmPasscode" placeholder="Confirm passcode" />
+    <button id="setPasscodeBtn">Set Passcode</button>
+    <p id="setPasscodeError" class="error-text" style="display:none;">Passcodes no match! 😐</p>
+  </div>
+
+  <div id="lockScreen" style="display: none;">
+    <h2>🔐 Enter Passcode</h2>
+    <input type="password" id="passcodeInput" placeholder="Enter your passcode" />
+    <button id="unlockBtn">Unlock Journal</button>
+    <p id="passcodeError" class="error-text" style="display:none;">Wrong passcode, try again 😡</p>
+    <button id="forgotPasscode">Forgot Passcode?</button>
+  </div>
+
+  <!-- Forgot Passcode Choice Modal -->
+  <div id="forgotPasscodeModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.8); z-index:1200; justify-content:center; align-items:center;">
+    <div style="background:#222; color:white; padding:20px; border-radius:8px; max-width:400px; text-align:center; box-shadow: 0 0 10px 3px orange;">
+      <p>olodo, How you go forget your passcode? omo, oya Wetin you wan do like this?</p>
+      <button id="resetPasscodeBtn" style="margin:10px; padding:8px 15px; border:none; background:orange; color:#111; border-radius:5px; cursor:pointer;">Reset Passcode (Clear All Gist)</button>
+      <button id="rememberPasscodeBtn" style="margin:10px; padding:8px 15px; border:none; background:crimson; color:white; border-radius:5px; cursor:pointer;">Try Again</button>
+    </div>
+  </div>
+
+  <div id="mainContent" style="display: none;">
+    <button id="changePasscodeBtn">Change Passcode</button>
+    <button id="exportBtn">Export All Gist 📄</button>
+    <button id="lockNowBtn">Lock Journal 🔒</button>
+
+    <form id="entryForm">
+      <label for="mood">How you dey feel?</label>
+      <select id="mood" required>
+        <option value="">Select mood</option>
+        <option value="😄 Happy">😄 Happy</option>
+        <option value="😞 Sad">😞 Sad</option>
+        <option value="😡 Angry">😡 Angry</option>
+        <option value="😕 Confused">😕 Confused</option>
+        <option value="😩 Tired">😩 Tired</option>
+        <option value="😎 Chill">😎 Chill</option>
+      </select>
+
+      <label for="thoughts">Wetin dey sup for your head?</label>
+      <textarea id="thoughts" placeholder="Talk your mind..." required></textarea>
+
+      <button type="submit">Save Gist</button>
+      <button id="clearAll" type="button">Clear All Gist 🗑️</button>
+    </form>
+
+    <div id="filterDiv">
+      <label for="filterMood">Filter by mood:</label>
+      <select id="filterMood">
+        <option value="all">All</option>
+        <option value="😄 Happy">😄 Happy</option>
+        <option value="😞 Sad">😞 Sad</option>
+        <option value="😡 Angry">😡 Angry</option>
+        <option value="😕 Confused">😕 Confused</option>
+        <option value="😩 Tired">😩 Tired</option>
+        <option value="😎 Chill">😎 Chill</option>
+      </select>
+    </div>
+
+    <h2>Your Past Gist 📓</h2>
+    <div id="entries"></div>
+  </div>
+
+</div>
+
+<div id="sidebarOverlay"></div>
+
+<script src="script.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+</script>
+</body>
+</html>
+
+

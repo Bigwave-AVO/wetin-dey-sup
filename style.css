@@ -1,0 +1,399 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #111;
+  color: #eee;
+  margin: 0;
+  padding: 2rem;
+}
+
+.app {
+  max-width: 600px;
+  margin: auto;
+  background: #222;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #555;
+}
+
+h1, h2 {
+  color: orange;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+select, textarea, button {
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+button {
+  background: crimson;
+  color: white;
+  cursor: pointer;
+}
+
+#entries {
+  margin-top: 1.5rem;
+}
+
+.entry {
+  background: #333;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+
+   /* overflow fix */
+  word-wrap: break-word;    /* break long words */
+  white-space: pre-wrap;    /* preserve line breaks and wrap */
+  overflow-wrap: anywhere;  /* super fallback for very long words */
+}
+
+.entry small {
+  color: #aaa;
+}
+
+#filterDiv {
+  margin-top: 2rem; /* Increased from 1rem to 2rem for more space */
+}
+
+#filterDiv select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: none;
+  background: #333;
+  color: #fff;
+}
+
+
+body.dark-mode {
+  background-color: #111;
+  color: white;
+}
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+  background-color: #222;
+  color: white;
+  border-color: orange;
+}
+
+/* Placeholder color for dark mode (light/white) */
+body.dark-mode ::placeholder,
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #fff;
+  opacity: 0.7;
+}
+
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* completely off-screen */
+  width: 250px;
+  height: 100vh;
+  padding: 20px;
+  z-index: 2000;
+  transition: left 0.3s, box-shadow 0.3s, background 0.3s;
+  border-right: none !important;
+  box-shadow: none !important;
+  background: #111;
+  color: orange;
+}
+
+#sidebar.show {
+  left: 0;
+}
+
+#sidebar.open {
+  left: 0 !important;
+  box-shadow: 2px 0 5px rgba(255, 165, 0, 0.7);
+  background: #111;
+}
+
+#overlay.show {
+  display: block;
+}
+
+/* Optional: Smooth transition for dark mode colors */
+body, input, select, textarea {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+#sidebar.open {
+  left: 0 !important;
+}
+
+body.light-mode {
+  background-color: #f7f7f7;
+  color: #222;
+}
+
+body.light-mode .app {
+  background: #fff;
+  color: #222;
+  box-shadow: 0 0 10px #bbb;
+}
+
+body.light-mode h1, 
+body.light-mode h2 {
+  color: #d35400;
+}
+
+body.light-mode #sidebar {
+  background: #f7f7f7; /* match body background */
+  color: #d35400;
+  box-shadow: none !important;
+  border-right: none !important;
+}
+
+body.light-mode #sidebar.open {
+  box-shadow: 2px 0 5px rgba(211, 84, 0, 0.2);
+  background: #fff; /* actual sidebar color when open */
+}
+
+body.light-mode #sidebar a {
+  color: #d35400 !important;
+}
+
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea {
+  background-color: #f7f7f7;
+  color: #222;
+  border-color: #d35400;
+}
+
+body.light-mode .entry {
+  background: #f1f1f1;
+  color: #222; /* Ensure text is visible in light mode */
+}
+
+body.light-mode .entry,
+body.light-mode .entry * {
+  color: #222 !important;
+}
+
+body.light-mode button {
+  background: #d35400;
+  color: #fff;
+}
+
+/* Placeholder color for light mode (dark/gray) */
+body.light-mode ::placeholder,
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder {
+  color: #222;
+  opacity: 0.7;
+}
+
+#themeToggleBtn {
+  display: none;
+}
+
+#sidebar.open #themeToggleBtn {
+  display: block;
+}
+
+#hamburger {
+  transition: opacity 0.2s;
+}
+
+#sidebar.open ~ #hamburger,
+#sidebar.open + #hamburger {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Make sure sidebar overlays everything */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100vh;
+  padding: 20px;
+  z-index: 2000;
+  transition: left 0.3s;
+}
+
+#sidebar.open {
+  left: 0 !important;
+}
+
+#sidebarOverlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1500;
+}
+#sidebar.open ~ #sidebarOverlay {
+  display: block;
+}
+
+/* DARK MODE: High contrast for inputs, textareas, selects */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid orange;
+}
+
+/* LIGHT MODE: High contrast for inputs, textareas, selects */
+body.light-mode input,
+body.light-mode textarea,
+body.light-mode select {
+  background-color: #fff;
+  color: #222;
+  border: 1px solid #d35400;
+}
+
+/* Ensure filter and mood dropdowns also match the theme */
+body.dark-mode #filterDiv select,
+body.dark-mode #mood {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid orange;
+}
+
+body.light-mode #filterDiv select,
+body.light-mode #mood {
+  background-color: #fff;
+  color: #222;
+  border: 1px solid #d35400;
+}
+
+/* Full entry modal for dark mode */
+body.dark-mode .full-entry-modal {
+  background: #222;
+  color: #fff;
+  border: 1px solid orange;
+}
+
+/* Full entry modal for light mode */
+body.light-mode .full-entry-modal {
+  background: #fff;
+  color: #222;
+  border: 1px solid #d35400;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.full-entry-modal {
+  min-width: 300px;
+  max-width: 90vw;
+  min-height: 100px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 10px orange;
+  padding: 24px;
+  background: #222;
+  color: #fff;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.light-mode .full-entry-modal {
+  background: #fff;
+  color: #222;
+  box-shadow: 0 0 10px #d35400;
+}
+
+.modal-close-btn {
+  padding: 8px 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background: crimson;
+  color: #fff;
+  font-size: 1rem;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.light-mode .modal-close-btn {
+  background: #d35400;
+  color: #fff;
+}
+
+body.dark-mode .modal-close-btn {
+  background: crimson;
+  color: #fff;
+}
+
+/* Hide box-shadow and border when sidebar is closed */
+#sidebar,
+body.light-mode #sidebar {
+  box-shadow: none !important;
+  border-right: none !important;
+}
+
+/* Only show box-shadow when sidebar is open */
+#sidebar.open {
+  box-shadow: 2px 0 5px rgba(255, 165, 0, 0.7);
+}
+
+body.light-mode #sidebar.open {
+  box-shadow: 2px 0 5px rgba(211, 84, 0, 0.2);
+}
+
+/* === SIDEBAR BASE === */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* completely off-screen */
+  width: 250px;
+  height: 100vh;
+  padding: 20px;
+  z-index: 2000;
+  transition: left 0.3s, box-shadow 0.3s, background 0.3s;
+  border-right: none !important;
+  box-shadow: none !important;
+  background: #111;
+  color: orange;
+}
+
+/* === SIDEBAR BASE IN LIGHT MODE (MATCH BODY BG) === */
+body.light-mode #sidebar {
+  background: #f7f7f7; /* match body background */
+  color: #d35400;
+  box-shadow: none !important;
+  border-right: none !important;
+}
+
+/* === SIDEBAR OPEN STATE === */
+#sidebar.open {
+  left: 0 !important;
+  box-shadow: 2px 0 5px rgba(255, 165, 0, 0.7);
+  background: #111;
+}
+
+/* === SIDEBAR OPEN STATE IN LIGHT MODE === */
+body.light-mode #sidebar.open {
+  box-shadow: 2px 0 5px rgba(211, 84, 0, 0.2);
+  background: #fff; /* actual sidebar color when open */
+}
+
+
