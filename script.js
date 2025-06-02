@@ -10,7 +10,7 @@ const setPasscodeError = document.getElementById('setPasscodeError');
 const passcodeInput = document.getElementById('passcodeInput');
 const passcodeError = document.getElementById('passcodeError');
 
-const passcode = localStorage.getItem('wetinPasscode');
+function getPasscode() { return localStorage.getItem('wetinPasscode'); }
 
 const setPasscodeScreen = document.getElementById('setPasscodeScreen');
 const lockScreen = document.getElementById('lockScreen');
@@ -154,7 +154,7 @@ function showMainContent() {
 }
 
 function init() {
-  if (!passcode) {
+  if (!getPasscode()) {
     showSetPasscodeScreen();
   } else {
     showLockScreen();
@@ -190,13 +190,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('unlockBtn').addEventListener('click', () => {
-    if (passcodeInput.value === localStorage.getItem('wetinPasscode')) {
-      passcodeError.style.display = 'none';
-      showMainContent();
-    } else {
-      passcodeError.style.display = 'block';
-    }
-  });
+  if (passcodeInput.value === getPasscode()) {
+    passcodeError.style.display = 'none';
+    showMainContent();
+  } else {
+    passcodeError.style.display = 'block';
+  }
+});
 
   forgotPasscodeBtn.addEventListener('click', () => {
     forgotPasscodeModal.style.display = 'flex';
