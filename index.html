@@ -12,15 +12,24 @@
   <meta property="og:description" content="A simple, private mental health journal for sharing your mood and thoughts.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="icon-512.png">
-  <meta property="og:url" content="https://wetin-dey-sup-iota.vercel.app/"><!-- Replace with your actual URL -->
+  <meta property="og:url" content="https://wetin-dey-sup-iota.vercel.app/">
+
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
 
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="16x16" href="icon-16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <script defer src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker registered'))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </head>
 <body>
   <div id="sidebar">
@@ -37,7 +46,7 @@
       <input type="password" id="newPasscode" placeholder="New Passcode">
       <input type="password" id="confirmPasscode" placeholder="Confirm Passcode">
       <button id="setPasscodeBtn">Set Passcode</button>
-      <p id="setPasscodeError" style="display:none;color:red;">Passcodes no match! 😐</p>
+      <p id="setPasscodeError" style="display:none;color:red;">Ode Passcodes no match! 😐</p>
     </div>
     <div id="lockScreen">
       <h2>🔐 Enter Passcode</h2>
@@ -88,15 +97,6 @@
       <div id="entries"></div>
     </div>
   </div>
-  <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('service-worker.js') // Register the service worker
-        .then(reg => console.log('Service Worker registered'))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    });
-  }
-</script>
 </body>
 </html>
 

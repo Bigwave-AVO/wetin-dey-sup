@@ -183,7 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     localStorage.setItem('wetinPasscode', newPasscode.value);
     setPasscodeError.style.display = 'none';
-    init();
+    // Update the passcode variable in memory
+    // passcode = newPasscode.value; // This won't work because passcode is a const
+    // Instead, call showLockScreen directly:
+    showLockScreen();
   });
 
   document.getElementById('unlockBtn').addEventListener('click', () => {
