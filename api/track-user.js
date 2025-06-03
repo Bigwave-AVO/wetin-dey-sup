@@ -1,18 +1,27 @@
-let users = new Set();
+import { createClient } from 'redis';
+
+let redis;
+
+async function getRedisClient() {
+  if (!redis) {
+    redis = createClient({ url: process.env.REDIS_URL });
+    redis.on('error', (err) => console.error('Redis Client Error', err));
+    await redis.connect();
+  }
+  return redis;
+}
 
 export default async function handler(req, res) {
-  if (req.method === "POST") {
-    try {
-      const { userId } = req.body;
-      if (userId) users.add(userId);
-      return res.status(200).json({ ok: true });
-    } catch {
-      return res.status(400).json({ ok: false });
-    }
-  } else if (req.method === "GET") {
-    // Return the current user count
-    return res.status(200).json({ count: users.size });
-  } else {
-    res.status(405).end();
-  }
+  const client = await getRedisClient();
+
+  // Use IP address as a simple user identifier
+  const userIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+  // Add the user IP to a Redis set
+  await client.sAdd('unique_users', userIp);
+
+  // Get the total unique users
+  const userCount = await client.sCard('unique_users');
+
+  res.status(200).json({ uniqueUsers: userCount });
 }
