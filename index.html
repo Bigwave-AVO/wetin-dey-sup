@@ -14,13 +14,13 @@
   <meta property="og:image" content="icon-512.png">
   <meta property="og:url" content="https://wetin-dey-sup-iota.vercel.app/">
 
-  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/android-chrome-512x512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
 
   <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+  <script type="module" src="js/main.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -29,16 +29,29 @@
           .catch(err => console.error('Service Worker registration failed:', err));
       });
     }
+
+    // If not unlocked, show lock screen
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!localStorage.getItem('wetinPasscode')) {
+        document.body.classList.remove('unlocked');
+      } else {
+        document.body.classList.add('unlocked');
+      }
+    });
   </script>
 </head>
 <body>
-  <div id="sidebar">
-    <button id="themeToggleBtn">Change Theme</button> 
-    <button id="changePasscodeBtn">Change Passcode</button> 
-    <button id="exportBtn">Export All Gist 📄</button>
+  <div id="hamburger" tabindex="0">
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
-  <div id="hamburger"><div></div><div></div><div></div></div>
-  <div id="sidebarOverlay"></div>
+  <nav id="menuDrawer">
+    <button id="themeToggleBtn">Change Theme</button>
+    <a href="reminder.html"><button type="button">Reminders & Timers</button></a>
+    <button id="changePasscodeBtn">Change Passcode</button>
+    <button id="exportBtn">Export All Gist 📄</button>
+  </nav>
   <div class="app">
     <h1>🧠 Wetin Dey Sup</h1>
     <div id="setPasscodeScreen">

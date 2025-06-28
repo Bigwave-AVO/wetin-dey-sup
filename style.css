@@ -1,13 +1,4 @@
 /* === BASE STYLES === */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #111;
-  color: #eee;
-  margin: 0;
-  padding: 2rem;
-  transition: background-color 0.3s, color 0.3s;
-  overflow-x: hidden; /* Prevent horizontal scroll and sidebar peeking */
-}
 
 .app {
   max-width: 600px;
@@ -187,113 +178,153 @@ body.light-mode #themeToggleBtn:hover {
   color: #fff !important;
 }
 
-/* === SIDEBAR, HAMBURGER, OVERLAY VISIBILITY === */
-#sidebar,
-#hamburger,
-#sidebarOverlay {
-  display: none;
-}
-
-body.unlocked #sidebar,
-body.unlocked #hamburger {
-  display: block;
-}
-
-body.unlocked #sidebarOverlay {
-  display: none;
-}
-
-body.unlocked #sidebar.open ~ #sidebarOverlay {
-  display: block;
-}
-
-/* Hide hamburger when sidebar is open */
-#sidebar.open ~ #hamburger {
-  display: none !important;
-}
-
-/* Show overlay only when sidebar is open */
-#sidebar.open ~ #sidebarOverlay {
-  display: block;
-}
-
-/* === SIDEBAR BASE === */
-#sidebar {
-  position: fixed;
-  top: 0;
-  left: -100vw; /* Fully off-screen, no peeking */
-  width: 250px;
-  height: 100vh;
-  padding: 20px;
-  z-index: 2000;
-  transition: left 0.3s, box-shadow 0.3s, background 0.3s;
-  border-right: none !important;
-  box-shadow: none !important;
-  background: #111;
-  color: #d35400;
-}
-
-/* === SIDEBAR BUTTONS === */
-#sidebar button {
-  margin-bottom: 10px; /* Add margin-bottom for spacing between buttons */
-  width: 100%; /* Ensure buttons take full width of the sidebar */
-  text-align: left; /* Align text to the left */
-  padding: 10px 15px; /* Add padding inside buttons for better appearance */
-}
-
-
-/* === SIDEBAR OPEN STATE === */
-#sidebar.open {
-  left: 0 !important;
-  box-shadow: 2px 0 5px rgba(255, 165, 0, 0.7);
-  background: #111;
-}
-
-/* === SIDEBAR BASE IN LIGHT MODE === */
-body.light-mode #sidebar {
-  background: #f7f7f7;
-  color: #d35400;
-  box-shadow: none !important;
-  border-right: none !important;
-}
-
-/* === SIDEBAR OPEN STATE IN LIGHT MODE === */
-body.light-mode #sidebar.open {
-  box-shadow: 2px 0 5px rgba(211, 84, 0, 0.2);
-  background: #fff;
-}
-
-/* === HAMBURGER ICON === */
 #hamburger {
-  position: fixed;
-  top: 10px;
-  left: 8px;
-  width: 32px;
-  height: 32px;
-  z-index: 2100;
-  cursor: pointer;
+  width: 36px;
+  height: 36px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
-}
-
-#hamburger div {
-  width: 24px;
-  height: 3.5px;
-  background: #d35400;
-  margin: 3px 0;
-  border-radius: 2px;
-  transition: all 0.2s;
-}
-
-/* === SIDEBAR OVERLAY === */
-#sidebarOverlay {
+  gap: 7px;
+  cursor: pointer;
+  margin: 18px 0 0 18px;
+  z-index: 1006;
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
-  z-index: 1500;
-  display: none;
+  top: 0;
+  left: 0;
+}
+#hamburger div {
+  height: 4px;
+  width: 100%;
+  background: #ff9800; /* Use a vibrant orange for dark mode */
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+body.light-mode #hamburger div {
+  background: #d35400; /* Use a lighter orange for light mode */
+}
+
+#menuDrawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh; /* Always full viewport height */
+  background: #181818;
+  box-shadow: 2px 0 12px #0004;
+  padding: 5.5em 1em 1em 1em; /* Add top padding for spacing from top */
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  transform: translateX(-110%);
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  z-index: 1005;
+}
+#menuDrawer.open {
+  transform: translateX(0);
+}
+
+/* 2. Make navbar color adapt to theme */
+body.light-mode #menuDrawer {
+  background: #fff;
+  box-shadow: 2px 0 12px #d3540033;
+}
+body.dark-mode #menuDrawer {
+  background: #181818;
+  box-shadow: 2px 0 12px #0004;
+}
+
+/* 3. Make navbar buttons smaller and less clustered */
+#menuDrawer button,
+#menuDrawer a > button {
+  width: 100%;
+  padding: 0.7em 0.5em;
+  margin: 0.3em 0;
+  font-size: 1rem;
+  border-radius: 8px;
+  background: #d35400 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 1px 3px #0002;
+  transition: background 0.2s;
+  outline: none !important;
+}
+#menuDrawer button:hover,
+#menuDrawer a > button:hover {
+  background: #bc4800 !important;
+  color: #fff !important;
+}
+
+body.light-mode #menuDrawer button,
+body.light-mode #menuDrawer a > button {
+  background: #d35400 !important;
+  color: #fff !important;
+}
+body.light-mode #menuDrawer button:hover,
+body.light-mode #menuDrawer a > button:hover {
+  background: #bc4800 !important;
+  color: #fff !important;
+}
+
+/* 4. Adjust hamburger icon color for both themes */
+#hamburger div {
+  background: #ff9800;
+}
+body.light-mode #hamburger div {
+  background: #d35400;
+}
+
+/* 5. Make all other buttons less large and less clustered */
+button,
+input[type="submit"],
+input[type="button"] {
+  padding: 0.7em 0.5em;
+  font-size: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.7em;
+}
+
+form > button,
+form > input[type="submit"],
+form > input[type="button"] {
+  margin-bottom: 0.7em;
+}
+
+.editGistBtn, .deleteGistBtn {
+  padding: 0.4em 1.2em;
+  margin-right: 0.5em;
+  border-radius: 6px;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.editGistBtn {
+  background: #2980b9;
+  color: #fff;
+}
+.editGistBtn:hover {
+  background: #1c5a85;
+}
+.deleteGistBtn {
+  background: #e74c3c;
+  color: #fff;
+}
+.deleteGistBtn:hover {
+  background: #c0392b;
+}
+
+@media (max-width: 700px) {
+  #menuDrawer {
+    width: 70vw;
+    min-width: 160px;
+    max-width: 300px;
+    padding-top: 4em;
+  }
+  #menuDrawer button,
+  #menuDrawer a > button {
+    font-size: 0.95rem;
+    padding: 0.7em 0.3em;
+  }
 }
 
 /* === MODAL STYLES === */
@@ -456,14 +487,204 @@ body.dark-mode h2 {
   color: orange;
 }
 
-body.dark-mode #sidebar {
-  color: orange;
+#menuDrawer.open ~ #hamburger,
+#menuDrawer.open + #hamburger {
+  display: none;
 }
 
-body.dark-mode #hamburger div {
-  background: orange;
+/* Or, more robust: */
+#menuDrawer.open ~ #hamburger,
+#menuDrawer.open + #hamburger,
+#menuDrawer.open #hamburger {
+  display: none !important;
 }
 
-body.dark-mode .full-entry-modal {
-  box-shadow: 0 0 10px orange;
+#reminderList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
+
+#reminderList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #232323;
+  border-radius: 8px;
+  padding: 0.8em 1.2em;
+  margin-bottom: 1em;
+  box-shadow: 0 1px 6px #0002;
+  gap: 1em;
+}
+
+body.light-mode #reminderList li {
+  background: #f3f3f3;
+  color: #222;
+  box-shadow: 0 2px 6px #eee;
+}
+
+#reminderList .reminder-info {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  flex-wrap: wrap;
+}
+
+#reminderList .reminder-meta {
+  font-size: 0.95em;
+  color: #aaa;
+  margin-left: 0.5em;
+}
+
+#reminderList .deleteBtn {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4em 1.2em;
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 1em;
+  transition: background 0.2s;
+}
+#reminderList .deleteBtn:hover {
+  background: #c0392b;
+}
+
+/* Add or update these at the end of your CSS file: */
+#menuDrawer button,
+#menuDrawer a > button {
+  background: crimson !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 1px 3px #0002;
+  transition: background 0.2s;
+}
+#menuDrawer button:hover,
+#menuDrawer a > button:hover {
+  background: rgb(163, 16, 46) !important;
+  color: #fff !important;
+}
+
+body.light-mode #menuDrawer button,
+body.light-mode #menuDrawer a > button {
+  background: #d35400 !important;
+  color: #fff !important;
+}
+body.light-mode #menuDrawer button:hover,
+body.light-mode #menuDrawer a > button:hover {
+  background: #bc4800 !important;
+  color: #fff !important;
+}
+
+/* Modal buttons in full-entry-modal */
+.full-entry-modal .editGistBtn {
+  background: crimson;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.full-entry-modal .editGistBtn:hover {
+  background: #bc4800;
+}
+
+.full-entry-modal .deleteGistBtn {
+  background: crimson;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.full-entry-modal .deleteGistBtn:hover {
+  background: #a80000;
+}
+
+.full-entry-modal .modal-close-btn {
+  background: #888;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.full-entry-modal .modal-close-btn:hover {
+  background: #555;
+}
+
+body.light-mode .full-entry-modal .editGistBtn {
+  background: #d35400;
+  color: #fff;
+}
+body.light-mode .full-entry-modal .editGistBtn:hover {
+  background: #bc4800;
+}
+body.light-mode .full-entry-modal .deleteGistBtn {
+  background: crimson;
+  color: #fff;
+}
+body.light-mode .full-entry_modal .deleteGistBtn:hover {
+  background: #a80000;
+}
+body.light-mode .full-entry-modal .modal-close-btn {
+  background: #888;
+  color: #fff;
+}
+body.light-mode .full-entry-modal .modal-close-btn:hover {
+  background: #555;
+}
+
+/* Add at the end of your CSS file: */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 22px;
+  margin-left: 1em;
+  vertical-align: middle;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 22px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+.switch input:checked + .slider {
+  background-color: #d35400;
+}
+.switch input:focus + .slider {
+  box-shadow: 0 0 1px #d35400;
+}
+.switch input:checked + .slider:before {
+  transform: translateX(16px);
+}
+body.light-mode .switch input:checked + .slider {
+  background-color: #d35400;
+}
+
