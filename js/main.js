@@ -3,14 +3,21 @@ import { displayEntries, addEntry, clearEntries, getEntries, setEntries } from '
 import { initTheme } from './theme.js';
 import { initSidebar } from './sidebar.js';
 
+function showHamburger(show) {
+  const hamburger = document.getElementById('hamburger');
+  if (hamburger) hamburger.style.display = show ? 'flex' : 'none';
+}
+
 function lockJournal() {
   showLockScreen();
-  localStorage.removeItem('wetinUnlocked'); // Add this line
+  localStorage.removeItem('wetinUnlocked');
+  showHamburger(false); // Hide hamburger when locked
 }
 
 function unlockJournal() {
   showMainContent(displayEntries, resetIdleTimer);
-  localStorage.setItem('wetinUnlocked', 'true'); // Add this line
+  localStorage.setItem('wetinUnlocked', 'true');
+  showHamburger(true); // Show hamburger when unlocked
 }
 
 function resetIdleTimer() {
@@ -30,8 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!getPasscode()) {
     showSetPasscodeScreen();
+    showHamburger(false);
   } else {
     showLockScreen();
+    showHamburger(false);
   }
 
   initPasscodeFeature(lockJournal, unlockJournal);

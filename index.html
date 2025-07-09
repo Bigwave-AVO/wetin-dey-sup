@@ -52,6 +52,8 @@
 
 </head>
 <body>
+  <div class="layout">
+    <div class="sidebar-area">
   <div id="hamburger" tabindex="0">
     <div></div>
     <div></div>
@@ -62,6 +64,7 @@
     <button id="changePasscodeBtn">Change Passcode</button>
     <button id="exportBtn">Export All Gist 📄</button>
   </nav>
+  </div>
   <div class="app">
     <h1>🧠 Wetin Dey Sup</h1>
     <div id="setPasscodeScreen">
@@ -73,11 +76,13 @@
     </div>
     <div id="lockScreen">
       <h2>🔐 Enter Passcode</h2>
+      <div class = "login-row">
       <input type="password" id="passcodeInput" placeholder="Enter Passcode">
       <button id="unlockBtn">Unlock Journal</button>
-      <p id="passcodeError" style="display:none;color:red;">you just dey Gbezome,...Oga open your eyes write correct passcode jor!</p>
       <button id="forgotPasscode">Forgot Passcode?</button>
-    </div>
+      </div>
+      <p id="passcodeError" style="display:none;color:red;">you just dey Gbezome,...Oga open your eyes write correct passcode jor!</p>
+   </div>
     <div id="forgotPasscodeModal" style="display:none;">
       <div class="modal-overlay">
         <div class="full-entry-modal">
