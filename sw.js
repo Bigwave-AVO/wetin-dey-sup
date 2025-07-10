@@ -1,19 +1,24 @@
-const CACHE_NAME = "wetindeysup-cache-v1";
+const CACHE_NAME = "wetindeysup-cache-v2"; // <-- bump this version on every deploy!
 const urlsToCache = [
   "./",
   "./index.html",
   "./style.css",
-  "./script.js",
   "./manifest.json",
-  "./android-chrome-192x192.png",
-  "./android-chrome-512x512.png"
+  "./js/main.js",
+  "./js/entries.js",
+  "./js/passcode.js",
+  "./js/sidebar.js",
+  "./js/theme.js",
+  "./assets/android-chrome-192x192.png",
+  "./assets/android-chrome-512x512.png",
+  "./assets/apple-touch-icon.png"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
-  self.skipWaiting(); // Activate new SW immediately
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
@@ -26,7 +31,7 @@ self.addEventListener("activate", event => {
       )
     )
   );
-  self.clients.claim(); // Take control of all pages
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
