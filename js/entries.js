@@ -1,18 +1,23 @@
 let entries = JSON.parse(localStorage.getItem('wetinEntries')) || [];
+// Replace quotes array with translation keys
 const quotes = [
-  "No forget say even Mad person dey rest sometimes! No go use work kill yourself ",
-  "You strong pass this wahala 💪",
-  "Na small small, e go better 🌱",
-  "Talk your mind, body no be firewood 🧘",
-  "Abeg no lock up, drop your gist 📝"
+  'quote1',
+  'quote2',
+  'quote3',
+  'quote4',
+  'quote5'
 ];
 
 let editingIndex = null; // Track which gist is being edited
 
 export function showQuote() {
   const entriesDiv = document.getElementById('entries');
-  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-  entriesDiv.innerHTML = `<p>${randomQuote}</p>`;
+  const lang = localStorage.getItem('wetinLang') || 'en';
+  fetch('translations.json').then(res => res.json()).then(data => {
+    const translations = data[lang];
+    const randomKey = quotes[Math.floor(Math.random() * quotes.length)];
+    entriesDiv.innerHTML = `<p>${translations[randomKey]}</p>`;
+  });
 }
 
 export function showFullEntry(entry, idx) {
@@ -20,18 +25,22 @@ export function showFullEntry(entry, idx) {
   overlay.className = 'modal-overlay';
   const content = document.createElement('div');
   content.className = 'full-entry-modal';
-  content.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <h3 style="margin-top:0;">Mood: ${entry.mood}</h3>
-      <button class="editGistBtn" title="Edit" style="margin-left:1em;">Edit</button>
-    </div>
-    <p style="white-space: pre-wrap; word-wrap: break-word;">${entry.text}</p>
-    <small>${entry.date}</small>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.5em;">
-      <button id="closeModalBtn" class="modal-close-btn">Close</button>
-      <button class="deleteGistBtn" title="Delete">Delete</button>
-    </div>
-  `;
+  const lang = localStorage.getItem('wetinLang') || 'en';
+  fetch('translations.json').then(res => res.json()).then(data => {
+    const translations = data[lang];
+    content.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="margin-top:0;">${translations['moodLabel']}: ${entry.mood}</h3>
+        <button class="editGistBtn" title="${translations['editTooltip']}" style="margin-left:1em;">${translations['editBtn']}</button>
+      </div>
+      <p style="white-space: pre-wrap; word-wrap: break-word;">${entry.text}</p>
+      <small>${entry.date}</small>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.5em;">
+        <button id="closeModalBtn" class="modal-close-btn">${translations['closeBtn']}</button>
+        <button class="deleteGistBtn" title="${translations['deleteTooltip']}">${translations['deleteBtn']}</button>
+      </div>
+    `;
+  });
   overlay.appendChild(content);
   document.body.appendChild(overlay);
 
@@ -46,7 +55,7 @@ export function showFullEntry(entry, idx) {
 
   // Delete button in modal with confirmation
   content.querySelector('.deleteGistBtn').onclick = () => {
-    if (confirm('Oga open your eyes o, you sure say you wan delete this gist? anno wan hear stories wey dey touch later o')) {
+    if (confirm(translations['deleteGistConfirm'])) {
       entries.splice(idx, 1);
       saveEntries();
       displayEntries();
@@ -74,7 +83,7 @@ export function displayEntries(filterMood = 'all') {
     filtered = entries.filter(e => e.mood === filterMood);
   }
   if (filtered.length === 0) {
-    entriesDiv.innerHTML = '<p>You dey nau, abi You put gist for here ?.</p>';
+    entriesDiv.innerHTML = `<p>${translations['noGistYet']}</p>`;
     return;
   }
   entriesDiv.innerHTML = filtered

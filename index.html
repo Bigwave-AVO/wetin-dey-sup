@@ -2,25 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wetin Dey Sup</title>
-  <meta name="description" content="Wetin Dey Sup is a simple, private mental health journal for sharing your mood and thoughts.">
+  <title>What's Up?</title>
+  <meta name="description" content="A personal journal app for tracking moods and thoughts">
   <meta name="theme-color" content="#d35400">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta property="og:title" content="Wetin Dey Sup - Mental Health Journal">
-  <meta property="og:description" content="A simple, private mental health journal for sharing your mood and thoughts.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="icon-512.png">
-  <meta property="og:url" content="https://wetin-dey-sup-iota.vercel.app/">
-
-  <link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="assets/android-chrome-512x512.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
-
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- normalize before your app styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
   <link rel="stylesheet" href="style.css">
-  <script type="module" src="js/main.js"></script>
+  <script defer src="script.js"></script>
+  <!-- Firebase Configuration -->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJpbfLEDxQSDaeSBQUKFz5nmMQBC72Adw",
+      authDomain: "what-s-up-journal.firebaseapp.com",
+      projectId: "what-s-up-journal",
+      storageBucket: "what-s-up-journal.firebasestorage.app",
+      messagingSenderId: "737537047504",
+      appId: "1:737537047504:web:92ccbc6e1442ab510457d5",
+      measurementId: "G-MWYTRYRVWH"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // Make auth available globally
+    window.firebaseAuth = auth;
+    window.googleSignIn = () => signInWithPopup(auth, provider);
+    window.googleSignOut = () => signOut(auth);
+    window.onAuthStateChanged = onAuthStateChanged;
+  </script>
+
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -29,110 +52,171 @@
           .catch(err => console.error('Service Worker registration failed:', err));
       });
     }
-
-    // If not unlocked, show lock screen
-    document.addEventListener('DOMContentLoaded', function() {
-      if (!localStorage.getItem('wetinPasscode')) {
-        document.body.classList.remove('unlocked');
-      } else {
-        document.body.classList.add('unlocked');
-      }
-    });
   </script>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KXGJHG6CCB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-KXGJHG6CCB');
-</script>
-
 </head>
 <body>
-  <div class="layout">
-    <div class="sidebar-area">
-  <div id="hamburger" tabindex="0">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-  <nav id="menuDrawer">
-    <button id="themeToggleBtn">Change Theme</button>
-    <button id="changePasscodeBtn">Change Passcode</button>
-    <button id="exportBtn">Export All Gist 📄</button>
-  </nav>
-  </div>
-  <div class="app">
-    <h1>🧠 Wetin Dey Sup</h1>
-    <div id="setPasscodeScreen">
-      <h2>🔐 Set a Passcode for your journal</h2>
-      <input type="password" id="newPasscode" placeholder="New Passcode">
-      <input type="password" id="confirmPasscode" placeholder="Confirm Passcode">
-      <button id="setPasscodeBtn">Set Passcode</button>
-      <p id="setPasscodeError" style="display:none;color:red;">Ode Passcodes no match! 😐</p>
-    </div>
-    <div id="lockScreen">
-      <h2>🔐 Enter Passcode</h2>
-      <div class = "login-row">
-      <input type="password" id="passcodeInput" placeholder="Enter Passcode">
-      <button id="unlockBtn">Unlock Journal</button>
-      <button id="forgotPasscode">Forgot Passcode?</button>
+  <div id="sidebar">
+    <div id="authSection">
+      <div id="userInfo">
+        <img id="userPhoto" alt="User Photo">
+        <p id="userName"></p>
+        <button id="signOutBtn">Sign Out</button>
       </div>
-      <p id="passcodeError" style="display:none;color:red;">you just dey Gbezome,...Oga open your eyes write correct passcode jor!</p>
-   </div>
-    <div id="forgotPasscodeModal" style="display:none;">
-      <div class="modal-overlay">
+      <button id="googleSignInBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        <span id="googleSignInText">Sign in with Google</span>
+      </button>
+    </div>
+    <button id="themeToggleBtn"></button>
+    <button id="changePasscodeBtn"></button>
+    <button id="exportBtn"></button>
+    <select id="languageSelect" class="language-select">
+      <option value="en">English</option>
+      <option value="pidgin">Pidgin</option>
+    </select>
+  </div>
+  <div id="hamburger"><div></div><div></div><div></div></div>
+  <div id="sidebarOverlay"></div>
+  <div class="app">
+    <h1 id="appTitle"></h1>
+
+    <!-- passcode + lock screens (existing) -->
+    <div id="setPasscodeScreen">
+      <h2 id="setPasscodeHeader"></h2>
+      <input type="password" id="newPasscode" placeholder="New Passcode" />
+      <input type="password" id="confirmPasscode" placeholder="Confirm Passcode" />
+      <button id="setPasscodeBtn"></button>
+      <p id="setPasscodeError" class="error-message"></p>
+    </div>
+
+    <div id="lockScreen">
+      <h2 id="lockScreenHeader"></h2>
+      <input type="password" id="passcodeInput" placeholder="Enter Passcode" />
+      <button id="unlockBtn"></button>
+      <p id="passcodeError" class="error-message"></p>
+      <button id="forgotPasscode"></button>
+    </div>
+
+    <!-- Forgot-passcode modal (needed by script.js) -->
+    <div id="forgotPasscodeModal" class="modal-hidden">
+      <div class="modal-overlay" role="dialog" aria-modal="true">
         <div class="full-entry-modal">
-          <p>olodo, How you go forget your passcode? omo, oya Wetin you wan do like this?</p>
-          <button id="resetPasscodeBtn">Reset Passcode (Clear All Gist)</button>
-          <button id="rememberPasscodeBtn">Try Again</button>
+          <p id="forgotPasscodeMsg"></p>
+          <div class="modal-buttons">
+            <button id="resetPasscodeBtn" type="button"></button>
+            <button id="rememberPasscodeBtn" type="button"></button>
+            <button id="modalCloseBtn" class="modal-close-btn" type="button"></button>
+          </div>
         </div>
       </div>
     </div>
-    <div id="mainContent">
-      <button id="lockNowBtn">Lock Journal 🔒</button>
-      <form id="entryForm">
-        <label for="mood">How you dey feel?</label>
-        <select id="mood">
-          <option value="" disabled selected>Select mood</option>
-          <option value="😄 Happy">😄 Happy</option>
-          <option value="😞 Sad">😞 Sad</option>
-          <option value="😡 Angry">😡 Angry</option>
-          <option value="😕 Confused">😕 Confused</option>
-          <option value="😩 Tired">😩 Tired</option>
-          <option value="😎 Chill">😎 Chill</option>
-        </select>
-        <textarea id="thoughts" placeholder="Wetin dey sup for your head?"></textarea>
-        <button type="submit">Save Gist</button>
-        <button type="button" id="clearAll">Clear All Gist 🗑️</button>
-      </form>
-      <div id="filterDiv">
-        <label for="filterMood">Filter by mood:</label>
-        <select id="filterMood">
-          <option value="all">All</option>
-          <option value="😄 Happy">😄 Happy</option>
-          <option value="😞 Sad">😞 Sad</option>
-          <option value="😡 Angry">😡 Angry</option>
-          <option value="😕 Confused">😕 Confused</option>
-          <option value="😩 Tired">😩 Tired</option>
-          <option value="😎 Chill">😎 Chill</option>
-        </select>
+
+    <!-- Edit Entry Modal -->
+    <div id="editEntryModal" class="modal-hidden">
+      <div class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="edit-entry-modal">
+          <h3 id="editModalTitle">Edit Entry</h3>
+          <form id="editForm">
+            <label for="editEntryTitle">Title:</label>
+            <input type="text" id="editEntryTitle" />
+            
+            <label for="editMood">Mood:</label>
+            <select id="editMood">
+              <option value="happy">😄 Happy</option>
+              <option value="sad">😞 Sad</option>
+              <option value="angry">😡 Angry</option>
+              <option value="confused">😕 Confused</option>
+              <option value="tired">😩 Tired</option>
+              <option value="chill">😎 Chill</option>
+            </select>
+            
+            <label for="editThoughts">Content:</label>
+            <textarea id="editThoughts" rows="4"></textarea>
+            
+            <div id="editVoiceControls" style="display: none;">
+              <label>Voice Note:</label>
+              <div id="editAudioPlayer"></div>
+              <button id="replaceVoiceBtn" type="button">Replace Voice Note</button>
+            </div>
+            
+            <div class="modal-buttons">
+              <button id="saveEditBtn" type="submit">Save Changes</button>
+              <button id="cancelEditBtn" type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <h2>Your Past Gist 📓</h2>
+    </div>
+
+    <div id="mainContent">
+      <button id="lockNowBtn"></button>
+
+      <!-- Entry form (clean voice controls - single reliable block) -->
+      <form id="entryForm">
+        <label for="entryTitle" id="entryTitleLabel"></label>
+        <input type="text" id="entryTitle" placeholder="" />
+
+        <label for="mood" id="moodLabel"></label>
+        <select id="mood" name="mood" required>
+          <option value="" id="selectMood"></option>
+          <option value="happy" id="moodHappy"></option>
+          <option value="sad" id="moodSad"></option>
+          <option value="angry" id="moodAngry"></option>
+          <option value="confused" id="moodConfused"></option>
+          <option value="tired" id="moodTired"></option>
+          <option value="chill" id="moodChill"></option>
+        </select>
+
+        <textarea id="thoughts" rows="4" placeholder="What's on your mind?"></textarea>
+
+        <!-- Voice note controls (separate from text saving) -->
+        <div class="voice-controls">
+          <button id="recordBtn" type="button" title="Record voice note" aria-pressed="false" data-recording="false">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z"/>
+              <path d="M19 11a1 1 0 0 0-2 0 5 5 0 0 1-10 0 1 1 0 0 0-2 0 7 7 0 0 0 6 6.92V21a1 1 0 1 0 2 0v-3.08A7 7 0 0 0 19 11z"/>
+            </svg>
+            <span id="recordStatus" class="record-status">Start</span>
+          </button>
+          <button id="saveVoiceBtn" type="button"></button>
+          <small class="voice-hint">Record and save voice notes separately</small>
+        </div>
+
+        <button id="saveBtn" type="submit"></button>
+        <button id="clearAll" type="button"></button>
+      </form>
+
+      <h2 id="pastGistHeader"></h2>
+
+      <!-- Search and Filter area -->
+      <div id="searchFilterDiv">
+        <div id="searchDiv">
+          <input type="text" id="searchInput" placeholder="" />
+          <button id="clearSearchBtn" type="button">✕</button>
+        </div>
+        <div id="filterDiv">
+          <label for="filterMood" id="filterMoodLabel"></label>
+          <select id="filterMood">
+            <option value="all" id="filterAll"></option>
+            <option value="happy" id="filterHappy"></option>
+            <option value="sad" id="filterSad"></option>
+            <option value="angry" id="filterAngry"></option>
+            <option value="confused" id="filterConfused"></option>
+            <option value="tired" id="filterTired"></option>
+            <option value="chill" id="filterChill"></option>
+          </select>
+        </div>
+      </div>
+
+    
       <div id="entries"></div>
     </div>
   </div>
-
-    <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('./sw.js');
-    });
-  }
-  </script>
 </body>
 </html>
 

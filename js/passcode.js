@@ -47,14 +47,21 @@ export function initPasscodeFeature(lockJournal, unlockJournal) {
   const resetPasscodeBtn = document.getElementById('resetPasscodeBtn');
   const rememberPasscodeBtn = document.getElementById('rememberPasscodeBtn');
 
+  // Add translation helper
+  function t(key) {
+    const lang = localStorage.getItem('wetinLang') || 'en';
+    if (!window._translations) return key;
+    return window._translations[lang][key] || key;
+  }
+
   setPasscodeBtn.onclick = () => {
     if (newPasscode.value === '' || confirmPasscode.value === '') {
-      setPasscodeError.textContent = 'alaye add passcode na!🙄';
+      setPasscodeError.textContent = t('setPasscodeErrorEmpty');
       setPasscodeError.style.display = 'block';
       return;
     }
     if (newPasscode.value !== confirmPasscode.value) {
-      setPasscodeError.textContent = 'Passcodes no match! 😐';
+      setPasscodeError.textContent = t('setPasscodeError');
       setPasscodeError.style.display = 'block';
       return;
     }
@@ -68,6 +75,7 @@ export function initPasscodeFeature(lockJournal, unlockJournal) {
       passcodeError.style.display = 'none';
       unlockJournal();
     } else {
+      passcodeError.textContent = t('passcodeError');
       passcodeError.style.display = 'block';
     }
   };
@@ -75,6 +83,7 @@ export function initPasscodeFeature(lockJournal, unlockJournal) {
   lockNowBtn.onclick = lockJournal;
 
   forgotPasscodeBtn.onclick = () => {
+    document.getElementById('forgotPasscodeMessage').innerText = t('forgotPasscodeMessage');
     forgotPasscodeModal.style.display = 'flex';
   };
 
