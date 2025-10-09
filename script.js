@@ -106,6 +106,10 @@ function updateAuthUI(user) {
 }
 
 function handleGoogleSignIn() {
+  console.log('handleGoogleSignIn called');
+  console.log('window.googleSignIn available:', !!window.googleSignIn);
+  console.log('window.firebaseAuth available:', !!window.firebaseAuth);
+  
   if (window.googleSignIn) {
     window.googleSignIn()
       .then((result) => {
@@ -113,11 +117,14 @@ function handleGoogleSignIn() {
         updateAuthUI(result.user);
       })
       .catch((error) => {
-        console.error('Sign in error:', error);
-        alert('Sign in failed. Please try again.');
+        console.error('Sign in error details:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        alert('Sign in failed: ' + error.message);
       });
   } else {
     console.error('Google sign in function not available');
+    alert('Firebase authentication not initialized. Please refresh the page.');
   }
 }
 

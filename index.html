@@ -32,16 +32,28 @@
     };
 
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+    try {
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+      
+      // Add custom parameters to the Google provider
+      provider.addScope('email');
+      provider.addScope('profile');
 
-    // Make auth available globally
-    window.firebaseAuth = auth;
-    window.googleSignIn = () => signInWithPopup(auth, provider);
-    window.googleSignOut = () => signOut(auth);
-    window.onAuthStateChanged = onAuthStateChanged;
+      // Make auth available globally
+      window.firebaseAuth = auth;
+      window.googleSignIn = () => signInWithPopup(auth, provider);
+      window.googleSignOut = () => signOut(auth);
+      window.onAuthStateChanged = onAuthStateChanged;
+      
+      console.log('Firebase initialized successfully');
+      console.log('Auth object:', auth);
+      console.log('Google provider configured');
+    } catch (error) {
+      console.error('Firebase initialization error:', error);
+    }
   </script>
 
   <script>
