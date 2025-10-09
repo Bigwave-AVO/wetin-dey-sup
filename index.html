@@ -44,7 +44,18 @@ const firebaseConfig = {
 
       // Make auth available globally
       window.firebaseAuth = auth;
-      window.googleSignIn = () => signInWithPopup(auth, provider);
+     window.googleSignIn = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    console.log('Signed in as:', user.displayName, user.email);
+    alert(`Welcome, ${user.displayName}!`);
+  } catch (error) {
+    console.error('Google sign-in error:', error);
+    alert(`Error: ${error.message}`);
+  }
+};
+
       window.googleSignOut = () => signOut(auth);
       window.onAuthStateChanged = onAuthStateChanged;
       
